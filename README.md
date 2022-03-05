@@ -21,6 +21,16 @@ Our approach involved the use of reinforcement learning in the form of multi-arm
 
 We were faced with the problem of a cold start (unsupervised learning) due to the lack of historical data regarding screen engagement with these newly generated headlines. 
 To combat that, we adopted the Thompson Sampling algorithm, which uses a beta distribution as a parametric assumption to model the prior unknown distribution. 
-The model recursively continues to learn and adjusts the reward model as a result. 
-  
+The model recursively continues to learn and adjusts the reward model as a result.
+
+### Data used:
+
+#### ACTION REWARDS
+Maps impressions to successful conversions
+#### WEATHER
+Normalized weather features per seasonality
+#### STORE
+Store level features such as number and location
+#### PRODUCT
+Product features such as product type, name, ingredients and flavor profile
 
