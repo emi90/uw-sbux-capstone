@@ -34,3 +34,25 @@ Store level features such as number and location
 #### PRODUCT
 Product features such as product type, name, ingredients and flavor profile
 
+### Project Goals
+
+- Determine context labels to requesting store
+- Predict optimal headline choice
+- Ensure product recommendation alignment with chosen headline
+
+### Feature Vectors
+
+<p style="text-align: center;">
+INPUTS   
+`requesting_store`, `time`, `weather`, `products`
+$\downarrow$   
+CONTEXT ELEMENTS   
+`preferred_mode`   
+`weather_state`   
+`store_city`   
+`daypart`   
+$\downarrow$   
+STRING TEMPLATES
+```"{weather_state} in {store_city}"   
+{daypart} {preferred_mode}"```
+</p>
