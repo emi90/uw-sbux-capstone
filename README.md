@@ -42,7 +42,6 @@ Product features such as product type, name, ingredients and flavor profile
 
 ### Feature Vectors
 
-<p style="text-align: center;">
 INPUTS   
 `requesting_store`, `time`, `weather`, `products`
 $\downarrow$   
@@ -55,5 +54,3 @@ $\downarrow$
 STRING TEMPLATES
 ```"{weather_state} in {store_city}"   
 {daypart} {preferred_mode}"```
-</p>
-</p>
