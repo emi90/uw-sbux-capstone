@@ -56,3 +56,4 @@ STRING TEMPLATES
 ```"{weather_state} in {store_city}"   
 {daypart} {preferred_mode}"```
 </p>
+</p>
