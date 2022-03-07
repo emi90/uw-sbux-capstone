@@ -55,5 +55,5 @@ Product features such as product type, name, ingredients and flavor profile
 [li-url_le]: https://www.linkedin.com/in/eyamauchi/
 [li-url_cg]: https://www.linkedin.com/in/eyamauchi/
 [li-url_ar]: https://www.linkedin.com/in/eyamauchi/
-[li-url_cge]: https://www.linkedin.com/in/eyamauchi/
+[li-url_clg]: https://www.linkedin.com/in/eyamauchi/
 [li-url_ey]: https://www.linkedin.com/in/eyamauchi/
