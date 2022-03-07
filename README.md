@@ -42,15 +42,4 @@ Product features such as product type, name, ingredients and flavor profile
 
 ### Feature Vectors
 
-INPUTS   
-`requesting_store`, `time`, `weather`, `products`
-$\downarrow$   
-CONTEXT ELEMENTS   
-`preferred_mode`   
-`weather_state`   
-`store_city`   
-`daypart`   
-$\downarrow$   
-STRING TEMPLATES
-```"{weather_state} in {store_city}"   
-{daypart} {preferred_mode}"```
+![feature vectors](https://github.com/emi90/uw-sbux-capstone/blob/main/img/feature_vectors.png)
