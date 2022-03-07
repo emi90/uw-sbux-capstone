@@ -1,9 +1,12 @@
 # Dynamic Contextualization for Starbucks Orders
-### University of Washington
-### MS in Data Science
+## University of Washington
+## MS in Data Science
 ### Capstone Project
 
-Leena Elamrawy | Corina Geier | Anant Rajeev | Christie L. Gan | Emily Yamauchi
+| Leena Elamrawy | Corina Geier   | Anant Rajeev   | Christie L. Gan | Emily Yamauchi |
+|----------------|----------------|----------------|-----------------|----------------|
+|[![LI][li-shield]][li-url_le]|[![LI][li-shield]][li-url_cg]|[![LI][li-shield]][li-url_ar]|[![LI][li-shield]][li-url_clg]|[![LI][li-shield]][li-url_ey]|
+|lelamraw@uw.edu|geiercc@uw.edu|anantr@uw.edu|clgan@uw.edu|eyamauch@uw.edu|
 
 ### Problem Statement
 
@@ -45,3 +48,12 @@ Product features such as product type, name, ingredients and flavor profile
 <p align="center">
   <img src="https://github.com/emi90/uw-sbux-capstone/blob/main/img/feature_vectors.png" />
 </p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+
+[li-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[li-url_le]: https://www.linkedin.com/in/eyamauchi/
+[li-url_cg]: https://www.linkedin.com/in/eyamauchi/
+[li-url_ar]: https://www.linkedin.com/in/eyamauchi/
+[li-url_cge]: https://www.linkedin.com/in/eyamauchi/
+[li-url_ey]: https://www.linkedin.com/in/eyamauchi/
