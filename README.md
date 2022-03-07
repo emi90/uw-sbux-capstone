@@ -42,4 +42,6 @@ Product features such as product type, name, ingredients and flavor profile
 
 ### Feature Vectors
 
-![feature vectors](https://github.com/emi90/uw-sbux-capstone/blob/main/img/feature_vectors.png)
+<p align="center">
+  <img src="https://github.com/emi90/uw-sbux-capstone/blob/main/img/feature_vectors.png" />
+</p>
