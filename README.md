@@ -29,13 +29,13 @@ The model recursively continues to learn and adjusts the reward model as a resul
 ### Data used:
 
 #### ACTION REWARDS
-Maps impressions to successful conversions
+- Maps impressions to successful conversions
 #### WEATHER
-Normalized weather features per seasonality
+- Normalized weather features per seasonality
 #### STORE
-Store level features such as number and location
+- Store level features such as number and location
 #### PRODUCT
-Product features such as product type, name, ingredients and flavor profile
+- Product features such as product type, name, ingredients and flavor profile
 
 ### Project Goals
 
