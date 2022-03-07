@@ -5,7 +5,7 @@
 
 | Leena Elamrawy | Corina Geier   | Anant Rajeev   | Christie L. Gan | Emily Yamauchi |
 |----------------|----------------|----------------|-----------------|----------------|
-|[![LI][li-shield]][li-url_le]|[![LI][li-shield]][li-url_cg]|[![LI][li-shield]][li-url_ar]|[![LI][li-shield]][li-url_clg]|[![LI][li-shield]][li-url_ey]|
+|[![LI][li-shield]][li-url_le]|[![LI][li-shield]][li-url_cg]|[![LI][li-shield]][li-url_ar]|[![LI][li-shield][li-url_clg]|[![LI][li-shield]][li-url_ey]|
 |lelamraw@uw.edu|geiercc@uw.edu|anantr@uw.edu|clgan@uw.edu|eyamauch@uw.edu|
 
 ### Problem Statement
