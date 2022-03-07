@@ -53,7 +53,7 @@ Product features such as product type, name, ingredients and flavor profile
 
 [li-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [li-url_le]: https://www.linkedin.com/in/leena-elamrawy
-[li-url_cg]: https://www.linkedin.com/in/eyamauchi/
+[li-url_cg]: https://www.linkedin.com/in/corina-geier
 [li-url_ar]: https://www.linkedin.com/in/anant-rajeev-95687a128
-[li-url_clg]: https://www.linkedin.com/in/eyamauchi/
+[li-url_clg]: https://www.linkedin.com/mwlite/in/christie-lee-gan-33a12a12a
 [li-url_ey]: https://www.linkedin.com/in/eyamauchi/
