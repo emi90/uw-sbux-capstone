@@ -54,6 +54,6 @@ Product features such as product type, name, ingredients and flavor profile
 [li-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [li-url_le]: https://www.linkedin.com/in/eyamauchi/
 [li-url_cg]: https://www.linkedin.com/in/eyamauchi/
-[li-url_ar]: https://www.linkedin.com/in/eyamauchi/
+[li-url_ar]: https://www.linkedin.com/in/anant-rajeev-95687a128
 [li-url_clg]: https://www.linkedin.com/in/eyamauchi/
 [li-url_ey]: https://www.linkedin.com/in/eyamauchi/
