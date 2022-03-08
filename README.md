@@ -52,7 +52,9 @@ The model recursively continues to learn and adjusts the reward model as a resul
 ### Multi-Armed Bandits
 
 The multi-armed bandit problem models an agent that wants to simultaneously acquire new knowledge (exploration) and optimize decisions based on existing knowledge (exploitation). 
+
 The information (customers purchasing the recommended products or not) gained from the data gathered will shift the distribution in different ways to reflect an accurate reward model. 
+
 The model recursively continues to learn about which headlines are contributing to a higher conversion rate. This then allows Starbucks to make a store-by-store decision with regards to which headlines they want to display on that drive-thru. 
 
 
