@@ -17,7 +17,7 @@ thereby increasing sales and ultimately producing higher incremental tickets.
 ### Solution
 
 Our system predicts context labels to a requesting store based on conditions like the weather and the time of day. 
-These context labels are then used to form potential headlines that would match these recommended products.    
+These context labels are then used to filter through potential headlines that would match these recommended products.    
 
 Out of all the potential headlines, we picked the one that would give us the highest conversion rate. 
 Our approach involved the use of reinforcement learning in the form of multi-armed bandits to determine the optimal headline choice.   
@@ -48,6 +48,14 @@ The model recursively continues to learn and adjusts the reward model as a resul
 <p align="center">
   <img src="https://github.com/emi90/uw-sbux-capstone/blob/main/img/feature_vectors.png" />
 </p>
+
+### Multi-Armed Bandits
+
+The multi-armed bandit problem models an agent that wants to simultaneously acquire new knowledge (exploration) and optimize decisions based on existing knowledge (exploitation). 
+The information (customers purchasing the recommended products or not) gained from the data gathered will shift the distribution in different ways to reflect an accurate reward model. 
+The model recursively continues to learn about which headlines are contributing to a higher conversion rate. This then allows Starbucks to make a store-by-store decision with regards to which headlines they want to display on that drive-thru. 
+
+
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
