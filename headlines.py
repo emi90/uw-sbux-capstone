@@ -167,6 +167,7 @@ class HeadlineGenerator():
         weather_state = self.get_weather_str(store_num, hour)
         city = self.get_store_city_str(store_num)
         daypart = self.get_daypart_str(hour)
+        assert daypart != 'closed', "Store are closed"
         modes = self.get_customer_mode(products)
         caffiene_validity = self.assert_caffeine_validity(hour, products)
         form_validity = self.assert_form_codes(store_num, hour, products)
