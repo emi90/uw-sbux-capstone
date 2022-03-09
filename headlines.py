@@ -15,17 +15,42 @@ class HeadlineGenerator():
     {weather_state} {daypart} in {store_city} - 1 possible headline
     i.e. Sunny Morning in Seattle
     """
-    def __init__(self, store_df, product_df, weather_df):
+    def __init__(self, store_df, product_df, weather_df, light_thres=0.5, sugar_thres=0.5, caff_thres=0.5, low_caff=50, mid_caff=100):
         """
         store_df: pd.DataFrame, dataframe for store data
         product_df: pd.DataFrame, dataframe for product data
         weather_df: pd.DataFrame, dataframe for weather data
+        light_thres: calorie quartile for determining 'Light Pick Me Up', default=0.5
+        sugar_thres: sugar quartile for determining 'Treat', default=0.5
+        caff_thres: caffeine quartile for determining 'Boost', default=0.5
+        low_caff: Caffeine threshold in mg for determining recommended caffeine vis-a-vis time of day, default=50
+        mid_caff: Caffeine threshold in mg for determining recommended caffeine vis-a-vis time of day, default=100
         """
         self.store_df = store_df
         self.product_df = product_df
         self.weather_df = weather_df
+        self.light_thres = light_thres
+        self.sugar_thres = sugar_thres
+        self.caff_thres = caff_thres
+        self.low_caff=50
+        self.mid_caff=100
+    
+    def set_sugar_thres(self, sugar_thres):
+        self.sugar_thres=sugar_thres
+    
+    def set_light_thres(self, light_thres):
+        self.light_thres=light_thres
+    
+    def set_caff_thres(self, caff_thres):
+        self.caff_thres=caff_thres
+    
+    def set_low_caff(self, low_caff):
+        self.low_caff=low_caff
+    
+    def set_mid_caff(self, mid_caff):
+        self.mid_caff=mid_caff
 
-    def get_weather_state(self, snow, rain, hot, cold, temp_deseas, humid):
+    def __get_weather_state(self, snow, rain, hot, cold, temp_deseas, humid):
         """
         Define helper method that encodes the weather state appropriately
         """
@@ -45,7 +70,7 @@ class HeadlineGenerator():
                 elif (hot==0) & (cold==0) & (humid==0):
                     return 'pleasant'
 
-    def get_weather_str(self, store_num, hour):
+    def __get_weather_str(self, store_num, hour):
         """"
         Returns string of weather_state (i.e. sunny, chilly)
         """
@@ -59,7 +84,7 @@ class HeadlineGenerator():
                                             x['ExtInd_TempHumidInteractDeseasM95']), axis=1)
         return df.loc[(df.StoreNumber==store_num)&(df.HourInDay==hour)]['weather_state'].item()
 
-    def get_daypart_str(self, hour):
+    def __get_daypart_str(self, hour):
         """
         Helper method to get daypart from hour
         """
@@ -77,14 +102,14 @@ class HeadlineGenerator():
         else:
             return 'closed'
 
-    def get_store_city_str(self, store_num):
+    def __get_store_city_str(self, store_num):
         """
         Helper method to get store city
         """
         df = self.store_df
         return df.loc[df['STORE_NUM'] == store_num]['city'].item()
 
-    def get_preferred_customer_modes(self, products, light_thres=0.5, sugar_thres=0.5, caff_thres=0.5):
+    def __get_preferred_customer_modes(self, products):
         """
         Get modes from the given products
         returns: np dxn matrix (modes), and list of flavors
@@ -92,30 +117,30 @@ class HeadlineGenerator():
         modes = np.zeros((3,len(products)))
         df = self.product_df.loc[self.product_df.prod_num_name.isin(products)].copy()
         # is_light
-        modes[0] = np.where(df['avg_calories'] < df['avg_calories'].quantile(light_thres),1.0, 0.0)
+        modes[0] = np.where(df['avg_calories'] < df['avg_calories'].quantile(self.light_thres),1.0, 0.0)
         # is_treat
-        modes[1] = np.where(df['avg_sugars_g'] > df['avg_sugars_g'].quantile(sugar_thres), 1.0, 0.0)
+        modes[1] = np.where(df['avg_sugars_g'] > df['avg_sugars_g'].quantile(self.sugar_thres), 1.0, 0.0)
         # is_boost
-        modes[2] = np.where(df['avg_caffeine_mg'] > df['avg_caffeine_mg'].quantile(caff_thres), 1.0, 0.0)
+        modes[2] = np.where(df['avg_caffeine_mg'] > df['avg_caffeine_mg'].quantile(self.caff_thres), 1.0, 0.0)
         # flavor
         flavor = [flv for flv in df.flavor_from_name if flv != None]
         form_codes = [cdes for cdes in df.new_codes if cdes != None]
 
         return modes, flavor, form_codes
 
-    def caffeine_thresholds(self, hour, low=50, mid=100):
+    def __caffeine_thresholds(self, hour):
         """
         Helper method to get recommended caffeine threshold
         """
         if hour < 12:
             caffeine_thres = np.inf
         elif hour < 17:
-            caffeine_thres = mid
+            caffeine_thres = self.mid_caff
         else:
-            caffeine_thres = low
+            caffeine_thres = self.low_caff
         return caffeine_thres
     
-    def assert_caffeine_validity(self, hour, products):
+    def __assert_caffeine_validity(self, hour, products):
         """
         Helper method to check whether caffeiene level matches the time of day
         """
@@ -127,7 +152,7 @@ class HeadlineGenerator():
         # any vs all
         return is_valid
 
-    def assert_form_codes(self, store_num, hour, products):
+    def __assert_form_codes(self, store_num, hour, products):
         """
         Helper method to check whether form code (iced, hot) matches the weather
         """
@@ -140,7 +165,7 @@ class HeadlineGenerator():
         #assert is_valid, "Drink type does not match weather recommendation"
         return is_valid
     
-    def get_customer_mode(self, products):
+    def __get_customer_mode(self, products):
         """
         Helper method to get the list of customer modes
         """
