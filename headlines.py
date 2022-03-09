@@ -75,7 +75,7 @@ class HeadlineGenerator():
         Returns string of weather_state (i.e. sunny, chilly)
         """
         df = self.weather_df.copy()
-        df['weather_state'] = df.apply(lambda x: self.get_weather_state(
+        df['weather_state'] = df.apply(lambda x: self.__get_weather_state(
                                             x['ExtInd_SnowSumM95'], 
                                             x['ExtInd_RainSumM95'], 
                                             x['ExtInd_TempAvgDeseasM95'],
@@ -146,7 +146,7 @@ class HeadlineGenerator():
         """
         df = self.product_df.loc[self.product_df.prod_num_name.isin(products)].copy().fillna(0)
         caffeine_levels = df['avg_caffeine_mg']
-        caffeine_recs = self.caffeine_thresholds(hour)
+        caffeine_recs = self.__caffeine_thresholds(hour)
         is_valid = all(caffeine_levels <= caffeine_recs)
         #assert is_valid, "Exceeds recommended caffeine threshold"
         # any vs all
@@ -156,8 +156,8 @@ class HeadlineGenerator():
         """
         Helper method to check whether form code (iced, hot) matches the weather
         """
-        form_codes = self.get_preferred_customer_modes(products)[2]
-        weather_state = self.get_weather_str(store_num, hour)
+        form_codes = self.__get_preferred_customer_modes(products)[2]
+        weather_state = self.__get_weather_str(store_num, hour)
         if weather_state == 'Sunny':
             is_valid = 'Hot' not in form_codes
         elif weather_state == 'Chilly' or 'Snowy' or 'Rainy':
@@ -169,7 +169,7 @@ class HeadlineGenerator():
         """
         Helper method to get the list of customer modes
         """
-        preferred_modes = self.get_preferred_customer_modes(products)
+        preferred_modes = self.__get_preferred_customer_modes(products)
         customer_mode = preferred_modes[0]
         flavors = preferred_modes[1]
         modes = []
@@ -189,13 +189,13 @@ class HeadlineGenerator():
         Method to get the list of headlines given the product list, time of day, and store number
         """
         headlines = []
-        weather_state = self.get_weather_str(store_num, hour)
-        city = self.get_store_city_str(store_num)
-        daypart = self.get_daypart_str(hour)
-        assert daypart != 'closed', "Store are closed"
-        modes = self.get_customer_mode(products)
-        caffiene_validity = self.assert_caffeine_validity(hour, products)
-        form_validity = self.assert_form_codes(store_num, hour, products)
+        weather_state = self.__get_weather_str(store_num, hour).title()
+        city = self.__get_store_city_str(store_num).title()
+        daypart = self.__get_daypart_str(hour).title()
+        assert daypart != 'closed', "Store is closed"
+        modes = self.__get_customer_mode(products)
+        caffiene_validity = self.__assert_caffeine_validity(hour, products)
+        form_validity = self.__assert_form_codes(store_num, hour, products)
         assert caffiene_validity, "Exceeds recommended caffiene threshold"
         assert form_validity, "Drink type does not match weather recommendation"
 
@@ -206,7 +206,8 @@ class HeadlineGenerator():
 
         if len(modes) > 0:
             for mode in modes:
-                headlines.append(f'{daypart} {mode}')
-                headlines.append(f'{weather_state} {mode}')
+                mode_ = mode.title()
+                headlines.append(f'{daypart} {mode_}')
+                headlines.append(f'{weather_state} {mode_}')
         
         return headlines

@@ -1,8 +1,9 @@
 import numpy as np
 
 class MultiArmBandits():
-    def __init__(self, num_headlines, num_turns, lbound=0.01, ubound=0.15):
-        self.num_headlines = num_headlines
+    def __init__(self, headlines, num_turns, lbound=0.01, ubound=0.15):
+        self.headlines = headlines
+        self.num_headlines = len(headlines)
         self.num_turns = num_turns
         self.num_conversions = np.zeros(self.num_headlines)
         self.num_fails = np.zeros(self.num_headlines)
@@ -36,4 +37,6 @@ class MultiArmBandits():
             for headline_idx in range(self.num_headlines):
                 print(f'Headline {headline_idx} was chosen {self.num_simul[headline_idx]} times')
             
-            print(f'n\Overall conclusion: best headline is {np.argmax(self.num_simul)}')
+            best_idx = np.argmax(self.num_simul)
+            print(f'\nOverall conclusion: best headline is {best_idx}')
+            print(f'\n{self.headlines[best_idx]}')
