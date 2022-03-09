@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 
@@ -16,18 +15,12 @@ class HeadlineGenerator():
     {weather_state} {daypart} in {store_city} - 1 possible headline
     i.e. Sunny Morning in Seattle
     """
-    def __init__(self, hour, store_num, products, store_df, product_df, weather_df):
+    def __init__(self, store_df, product_df, weather_df):
         """
-        hour: int, 0-23
-        store_num: int, store number (given)
-        products: list, 4 recommended products (given)
         store_df: pd.DataFrame, dataframe for store data
         product_df: pd.DataFrame, dataframe for product data
         weather_df: pd.DataFrame, dataframe for weather data
         """
-        self.hour = hour
-        self.store_num = store_num
-        self.products = products
         self.store_df = store_df
         self.product_df = product_df
         self.weather_df = weather_df
@@ -52,7 +45,7 @@ class HeadlineGenerator():
                 elif (hot==0) & (cold==0) & (humid==0):
                     return 'pleasant'
 
-    def get_weather_str(self):
+    def get_weather_str(self, store_num, hour):
         """"
         Returns string of weather_state (i.e. sunny, chilly)
         """
@@ -64,40 +57,40 @@ class HeadlineGenerator():
                                             x['ExtInd_TempAvgDeseasM05'], 
                                             x['TempAvgDeseas'], 
                                             x['ExtInd_TempHumidInteractDeseasM95']), axis=1)
-        return df.loc[(df.StoreNumber==self.store_num)&(df.HourInDay==self.hour)]['weather_state'].item()
+        return df.loc[(df.StoreNumber==store_num)&(df.HourInDay==hour)]['weather_state'].item()
 
-    def get_daypart_str(self):
+    def get_daypart_str(self, hour):
         """
         Helper method to get daypart from hour
         """
-        if self.hour > 6:
-            if self.hour <= 11:
+        if hour > 6:
+            if hour <= 11:
                 return 'morning'
-            elif self.hour <= 14:
+            elif hour <= 14:
                 return 'lunch'
-            elif self.hour <= 17:
+            elif hour <= 17:
                 return 'afternoon'
-            elif self.hour <= 22:
+            elif hour <= 22:
                 return 'evening'
             else:
                 return 'closed'
         else:
             return 'closed'
 
-    def get_store_city_str(self):
+    def get_store_city_str(self, store_num):
         """
         Helper method to get store city
         """
         df = self.store_df
-        return df.loc[df['STORE_NUM'] == self.store_num]['city'].item()
+        return df.loc[df['STORE_NUM'] == store_num]['city'].item()
 
-    def get_preferred_customer_modes(self, light_thres=0.5, sugar_thres=0.5, caff_thres=0.5):
+    def get_preferred_customer_modes(self, products, light_thres=0.5, sugar_thres=0.5, caff_thres=0.5):
         """
         Get modes from the given products
         returns: np dxn matrix (modes), and list of flavors
         """
-        modes = np.zeros((3,len(self.prod_list)))
-        df = self.product_df.loc[self.product_df.prod_num_name.isin(self.prod_list)].copy()
+        modes = np.zeros((3,len(products)))
+        df = self.product_df.loc[self.product_df.prod_num_name.isin(products)].copy()
         # is_light
         modes[0] = np.where(df['avg_calories'] < df['avg_calories'].quantile(light_thres),1.0, 0.0)
         # is_treat
@@ -105,39 +98,41 @@ class HeadlineGenerator():
         # is_boost
         modes[2] = np.where(df['avg_caffeine_mg'] > df['avg_caffeine_mg'].quantile(caff_thres), 1.0, 0.0)
         # flavor
-        flavor = [flv for flv in df.NotionalFlavors if flv != None]
-        form_codes = [cdes for cdes in df.FormCodes if cdes != None]
+        flavor = [flv for flv in df.flavor_from_name if flv != None]
+        form_codes = [cdes for cdes in df.new_codes if cdes != None]
 
         return modes, flavor, form_codes
 
-    def caffeine_thresholds(self, low=50, mid=100):
+    def caffeine_thresholds(self, hour, low=50, mid=100):
         """
         Helper method to get recommended caffeine threshold
         """
-        if self.hour < 12:
+        if hour < 12:
             caffeine_thres = np.inf
-        elif self.hour < 17:
+        elif hour < 17:
             caffeine_thres = mid
         else:
             caffeine_thres = low
         return caffeine_thres
     
-    def assert_caffeine_validity(self):
+    def assert_caffeine_validity(self, hour, products):
         """
         Helper method to check whether caffeiene level matches the time of day
         """
-        caffeine_levels = self.product_df.loc[self.product_df.prod_num_name.isin(self.prod_list)].copy()['avg_caffeine_mg']
-        caffeine_recs = self.caffeine_thresholds()
-        is_valid = caffeine_levels <= caffeine_recs
+        df = self.product_df.loc[self.product_df.prod_num_name.isin(products)].copy().fillna(0)
+        caffeine_levels = df['avg_caffeine_mg']
+        caffeine_recs = self.caffeine_thresholds(hour)
+        is_valid = all(caffeine_levels <= caffeine_recs)
         #assert is_valid, "Exceeds recommended caffeine threshold"
+        # any vs all
         return is_valid
 
-    def assert_form_codes(self):
+    def assert_form_codes(self, store_num, hour, products):
         """
         Helper method to check whether form code (iced, hot) matches the weather
         """
-        form_codes = self.get_preferred_customer_modes()[2]
-        weather_state = self.get_weather_str()
+        form_codes = self.get_preferred_customer_modes(products)[2]
+        weather_state = self.get_weather_str(store_num, hour)
         if weather_state == 'Sunny':
             is_valid = 'Hot' not in form_codes
         elif weather_state == 'Chilly' or 'Snowy' or 'Rainy':
@@ -145,11 +140,11 @@ class HeadlineGenerator():
         #assert is_valid, "Drink type does not match weather recommendation"
         return is_valid
     
-    def get_customer_mode(self):
+    def get_customer_mode(self, products):
         """
         Helper method to get the list of customer modes
         """
-        preferred_modes = self.get_preferred_customer_modes()
+        preferred_modes = self.get_preferred_customer_modes(products)
         customer_mode = preferred_modes[0]
         flavors = preferred_modes[1]
         modes = []
@@ -164,17 +159,17 @@ class HeadlineGenerator():
         return modes
 
     
-    def get_headlines(self):
+    def get_headlines(self, store_num, hour, products):
         """
         Method to get the list of headlines given the product list, time of day, and store number
         """
         headlines = []
-        weather_state = self.get_weather_str()
-        city = self.get_store_city_str()
-        daypart = self.get_daypart_str()
-        modes = self.get_customer_mode()
-        caffiene_validity = self.assert_caffeine_validity()
-        form_validity = self.assert_form_codes()
+        weather_state = self.get_weather_str(store_num, hour)
+        city = self.get_store_city_str(store_num)
+        daypart = self.get_daypart_str(hour)
+        modes = self.get_customer_mode(products)
+        caffiene_validity = self.assert_caffeine_validity(hour, products)
+        form_validity = self.assert_form_codes(store_num, hour, products)
         assert caffiene_validity, "Exceeds recommended caffiene threshold"
         assert form_validity, "Drink type does not match weather recommendation"
 
@@ -189,4 +184,3 @@ class HeadlineGenerator():
                 headlines.append(f'{weather_state} {mode}')
         
         return headlines
-
