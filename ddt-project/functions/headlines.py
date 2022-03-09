@@ -158,11 +158,15 @@ class HeadlineGenerator():
         """
         form_codes = self.__get_preferred_customer_modes(products)[2]
         weather_state = self.__get_weather_str(store_num, hour)
+        is_valid = False
         if weather_state == 'Sunny':
             is_valid = 'Hot' not in form_codes
-        elif weather_state == 'Chilly' or 'Snowy' or 'Rainy':
+            return is_valid
+        elif weather_state == 'Chilly' or weather_state == 'Snowy' or weather_state == 'Rainy':
             is_valid = 'Iced' not in form_codes
+            return is_valid
         #assert is_valid, "Drink type does not match weather recommendation"
+        is_valid = True
         return is_valid
     
     def __get_customer_mode(self, products):
