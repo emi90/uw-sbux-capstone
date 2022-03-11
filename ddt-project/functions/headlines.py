@@ -88,19 +88,15 @@ class HeadlineGenerator():
         """
         Helper method to get daypart from hour
         """
-        if hour > 6:
-            if hour <= 11:
-                return 'morning'
-            elif hour <= 14:
-                return 'lunch'
-            elif hour <= 17:
-                return 'afternoon'
-            elif hour <= 22:
-                return 'evening'
-            else:
-                return 'closed'
+        if hour < 11 and hour >= 3:
+            return 'morning'
+        elif hour < 14:
+            return 'lunch'
+        elif hour <= 17:
+            return 'afternoon'
         else:
-            return 'closed'
+            return 'evening'
+
 
     def __get_store_city_str(self, store_num):
         """
@@ -196,7 +192,8 @@ class HeadlineGenerator():
         weather_state = self.__get_weather_str(store_num, hour).title()
         city = self.__get_store_city_str(store_num).title()
         daypart = self.__get_daypart_str(hour).title()
-        assert daypart != 'closed', "Store is closed"
+        #assert daypart != 'closed', "Store is closed"
+        # this assert is taken out- MAB walkthru allowed 'closed' hours
         modes = self.__get_customer_mode(products)
         caffiene_validity = self.__assert_caffeine_validity(hour, products)
         form_validity = self.__assert_form_codes(store_num, hour, products)

@@ -1,7 +1,19 @@
 import numpy as np
 
 class MultiArmBandits():
+    """
+    Muti-armed bandits class to determine the best headline using thomspon sampling
+    Reference: Thomspon Sampling & Multi-Armed Bandit Problem
+        Author: daniel.soper@gmail.com
+        url: https://colab.research.google.com/drive/1R5QiVlF6w08dyQmTE6AoBi-TfjOoXcSk
+    """
     def __init__(self, headlines, num_turns, lbound=0.01, ubound=0.15):
+        """
+        headlines: list of possible headlines
+        num_turns: number of turns to run the simulation
+        lbound: lower bound of uniform distribution (default=0.01)
+        ubound: upper bound of uniform distribution (default=0.15)
+        """
         self.headlines = headlines
         self.num_headlines = len(headlines)
         self.num_turns = num_turns
@@ -16,6 +28,10 @@ class MultiArmBandits():
                     self.outcomes[turn_idx][headline_idx] = 1
     
     def simulation(self, verbose=False):
+        """
+        Run thomspon sampling for n turns
+        Returns tuple of list of conversions and fails
+        """
         for turn_idx in range(self.num_turns):
             headline_ = -1
             max_beta = -1
@@ -40,3 +56,5 @@ class MultiArmBandits():
             best_idx = np.argmax(self.num_simul)
             print(f'\nOverall conclusion: best headline is {best_idx}')
             print(f'\n{self.headlines[best_idx]}')
+        
+        return self.num_conversions, self.num_fails
