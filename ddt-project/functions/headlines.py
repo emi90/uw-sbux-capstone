@@ -88,15 +88,19 @@ class HeadlineGenerator():
         """
         Helper method to get daypart from hour
         """
-        if hour < 11 and hour >= 3:
-            return 'morning'
-        elif hour < 14:
-            return 'lunch'
-        elif hour <= 17:
-            return 'afternoon'
+        if hour > 6:
+            if hour <= 11:
+                return 'morning'
+            elif hour <= 14:
+                return 'lunch'
+            elif hour <= 17:
+                return 'afternoon'
+            elif hour <= 22:
+                return 'evening'
+            else:
+                return 'closed'
         else:
-            return 'evening'
-
+            return 'closed'
 
     def __get_store_city_str(self, store_num):
         """
@@ -153,16 +157,15 @@ class HeadlineGenerator():
         Helper method to check whether form code (iced, hot) matches the weather
         """
         form_codes = self.__get_preferred_customer_modes(products)[2]
+        #print('form_codes: ', form_codes)
         weather_state = self.__get_weather_str(store_num, hour)
-        is_valid = False
-        if weather_state == 'Sunny':
-            is_valid = 'Hot' not in form_codes
-            return is_valid
-        elif weather_state == 'Chilly' or weather_state == 'Snowy' or weather_state == 'Rainy':
-            is_valid = 'Iced' not in form_codes
-            return is_valid
-        #assert is_valid, "Drink type does not match weather recommendation"
+        #print('weather_state: ', weather_state)
         is_valid = True
+        if weather_state == 'sunny':
+            is_valid = 'Hot' not in form_codes
+        elif weather_state == 'chilly' or weather_state == 'snowy' or weather_state == 'rainy':
+            is_valid = 'Iced' not in form_codes
+        #assert is_valid, "Drink type does not match weather recommendation"
         return is_valid
     
     def __get_customer_mode(self, products):
@@ -192,8 +195,7 @@ class HeadlineGenerator():
         weather_state = self.__get_weather_str(store_num, hour).title()
         city = self.__get_store_city_str(store_num).title()
         daypart = self.__get_daypart_str(hour).title()
-        #assert daypart != 'closed', "Store is closed"
-        # this assert is taken out- MAB walkthru allowed 'closed' hours
+        assert daypart != 'closed', "Store is closed"
         modes = self.__get_customer_mode(products)
         caffiene_validity = self.__assert_caffeine_validity(hour, products)
         form_validity = self.__assert_form_codes(store_num, hour, products)
