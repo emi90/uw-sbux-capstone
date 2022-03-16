@@ -43,6 +43,19 @@ The model recursively continues to learn and adjusts the reward model as a resul
 - Predict optimal headline choice
 - Ensure product recommendation alignment with chosen headline
 
+### Assumptions
+
+Below are some of the assumptions and thresholds that were set for this project.
+- Cold drinks are not recommended for cold days and hot drinks are not recommended for hot days
+- Caffeine thresholds were set at 50mg or lower for a low caffeine drink, and 50 to 100mg for a mid level caffeinated drink
+- "Pleasant" weather state was defined if the weather state was not rainy, snowy, hot, cold, or humid
+- "Sunny" weather was defined if it was not rainy, snowy and the deseasonalized temperature was above 0
+- Morning hours were set between 3am and 11am, lunch between 11am and 2pm, afternoon between 2pm to 5pm and evening between 5pm and 3am
+- 12pm to 5pm allows for mid level caffienated drinks, and 5pm to midnight assumes low caffeine drink recommendations
+- Sugar thresholds for defining a product as a "Treat" is set at a default of containing above the average amount of sugar 
+- Caffeine thresholds for determining if a product was a "Boost" or not is set at a default of containing above the average amount of caffeine
+- A "Light Pick Me Up" product was defined as containing below the average amount of calories from the product list.
+
 ### Feature Vectors
 
 <p align="center">
