@@ -197,9 +197,9 @@ class HeadlineGenerator():
         daypart = self.__get_daypart_str(hour).title()
         assert daypart != 'closed', "Store is closed"
         modes = self.__get_customer_mode(products)
-        caffiene_validity = self.__assert_caffeine_validity(hour, products)
+        caffeine_validity = self.__assert_caffeine_validity(hour, products)
         form_validity = self.__assert_form_codes(store_num, hour, products)
-        assert caffiene_validity, "Exceeds recommended caffiene threshold"
+        assert caffeine_validity, "Exceeds recommended caffeine threshold"
         assert form_validity, "Drink type does not match weather recommendation"
 
         # headlines
